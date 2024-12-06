@@ -1,0 +1,5 @@
+[
+    {"countryName":"France", "capital":"Paris", "gdp":5},
+    {"countryName":"Germany", "capital":"Berlin", "gdp":25},
+    {"countryName":"England", "capital":"London", "gdp":200}
+]

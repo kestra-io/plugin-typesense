@@ -1,0 +1,18 @@
+id: typesense
+namespace: io.kestra.plugin.typesense
+
+tasks:
+- id: indexDocument
+  type: io.kestra.plugin.typesense.DocumentIndex
+  document: { "countryName":"France", "capital": "Paris", "gdp": 123456}
+  apiKey: test-key
+  port: 8108
+  host: localhost
+  collection: Countries
+- id: getDocument
+  type: io.kestra.plugin.typesense.DocumentGet
+  documentId: "0"
+  apiKey: test-key
+  port: 8108
+  host: localhost
+  collection: Countries
