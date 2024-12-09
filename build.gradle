@@ -30,7 +30,7 @@ java {
 }
 
 group "io.kestra.plugin"
-description 'Plugin template for Kestra'
+description 'Plugin typesense for Kestra'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
@@ -51,6 +51,9 @@ dependencies {
     annotationProcessor group: "io.kestra", name: "processor", version: kestraVersion
     compileOnly group: "io.kestra", name: "core", version: kestraVersion
     compileOnly group: "io.kestra", name: "script", version: kestraVersion
+
+    // Typesense
+    implementation 'org.typesense:typesense-java:1.1.0'
 }
 
 
@@ -98,6 +101,11 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
     testImplementation "org.hamcrest:hamcrest"
     testImplementation "org.hamcrest:hamcrest-library"
+
+    //test container
+    testImplementation 'org.testcontainers:testcontainers:1.20.4'
+
+    testImplementation group: 'com.devskiller.friendly-id', name: 'friendly-id'
 }
 
 /**********************************************************************************************************************\
