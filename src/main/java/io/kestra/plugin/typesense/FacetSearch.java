@@ -5,7 +5,6 @@ import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.runners.RunContext;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -52,9 +51,7 @@ import org.typesense.model.SearchParameters;
 public class FacetSearch extends Search {
 
     @Schema(
-        title = "The query",
-        example = "Tokyo",
-        requiredMode = RequiredMode.REQUIRED
+        title = "The query"
     )
     @NotNull
     protected Property<String> facetBy;

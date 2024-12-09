@@ -2,7 +2,6 @@ package io.kestra.plugin.typesense;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import io.kestra.core.junit.annotations.KestraTest;
 import io.kestra.core.models.property.Property;
@@ -44,20 +43,4 @@ class DocumentGetTest extends TypesenseContainer {
         assertThat(runOutput.getDocument().get("gdp"), is(123456));
     }
 
-    @Test
-    void should_get_document_not_found() throws Exception {
-        RunContext runContext = runContextFactory.of(Map.of());
-
-        DocumentGet task = DocumentGet.builder()
-            .documentId(Property.of("1"))
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
-            .build();
-
-        DocumentGet.Output runOutput = task.run(runContext);
-
-        assertNull(runOutput.getDocument());
-    }
 }

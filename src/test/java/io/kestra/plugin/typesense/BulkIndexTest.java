@@ -2,6 +2,7 @@ package io.kestra.plugin.typesense;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 
 import com.devskiller.friendly_id.FriendlyId;
 import io.kestra.core.junit.annotations.KestraTest;
@@ -9,6 +10,7 @@ import io.kestra.core.models.property.Property;
 import io.kestra.core.runners.RunContext;
 import io.kestra.core.runners.RunContextFactory;
 import io.kestra.core.storages.StorageInterface;
+import io.kestra.plugin.typesense.BulkIndex.Output;
 import io.kestra.plugin.typesense.typesense.TypesenseContainer;
 import jakarta.inject.Inject;
 import java.io.File;
@@ -36,7 +38,7 @@ class BulkIndexTest extends TypesenseContainer {
         URI source = storageInterface.put(
             null,
             null,
-            new URI("/" + FriendlyId.createFriendlyId()),
+            new URI("/" + FriendlyId.createFriendlyId() + ".ion"),
             new FileInputStream(new File(Objects.requireNonNull(BulkIndexTest.class.getClassLoader()
                     .getResource("files/bulk_import.ion"))
                 .toURI()))
@@ -50,15 +52,24 @@ class BulkIndexTest extends TypesenseContainer {
             .host(Property.of(HOST))
             .collection(Property.of(COLLECTION))
             .from(Property.of(source.toString()))
+            .chunk(Property.of(2))
             .build();
 
-        task.run(runContext);
+        Output output = task.run(runContext);
+
+        assertThat(output.getSize(), is(3L));
 
         String export = client.collections(COLLECTION).documents().export();
 
         assertThat(export, containsString("France"));
         assertThat(export, containsString("Germany"));
         assertThat(export, containsString("England"));
+
+        assertThat(runContext.metrics().size(), is(2));
+        assertThat(runContext.metrics().get(0).getName(), is("requests.count"));
+        assertThat(runContext.metrics().get(0).getValue(), is(2D));
+        assertThat(runContext.metrics().get(1).getName(), is("records"));
+        assertThat(runContext.metrics().get(1).getValue(), is(3D));
     }
 
 

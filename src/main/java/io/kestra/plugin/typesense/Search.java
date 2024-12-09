@@ -7,7 +7,6 @@ import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.runners.RunContext;
 import io.kestra.core.serializers.FileSerde;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,12 +14,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.slf4j.Logger;
 import org.typesense.api.Client;
 import org.typesense.model.SearchParameters;
 import org.typesense.model.SearchResult;
@@ -63,40 +62,35 @@ import reactor.core.publisher.Flux;
 public class Search extends AbstractTypesenseTask implements RunnableTask<Search.Output> {
 
     @Schema(
-        title = "The query",
-        example = "Tokyo",
-        requiredMode = RequiredMode.REQUIRED
+        title = "The query"
     )
     @NotNull
     protected Property<String> query;
 
     @Schema(
         title = "The fields to query",
-        example= "country, capital",
-        requiredMode = RequiredMode.REQUIRED
+        example= "country, capital"
     )
     @NotNull
     protected Property<String> queryBy;
 
     @Schema(
-        title = "The filters to apply to the query",
-        example = "countryName: [France, Germany]"
+        title = "The filters to apply to the query"
     )
-    @Default
-    protected Property<String> filter = Property.of("");
+    protected Property<String> filter;
 
     @Schema(
-        title = "The sorts to apply to the query",
-        example = "gdp:desc"
+        title = "The sorts to apply to the query"
     )
-    @Default
-    protected Property<String> sortBy = Property.of("");
+    protected Property<String> sortBy;
 
 
     @Override
     public Output run(RunContext runContext) throws Exception {
         Client client = getClient(runContext);
         SearchParameters searchParameters = buildSearchParam(runContext);
+        Logger logger = runContext.logger();
+        logger.debug("Search with query: {}", searchParameters);
         SearchResult searchResult = client.collections(renderCollection(runContext)).documents()
             .search(searchParameters);
         return generateOutput(runContext, searchResult);
@@ -107,8 +101,8 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
         return new SearchParameters()
             .q(renderString(query, runContext))
             .queryBy(renderString(queryBy, runContext))
-            .filterBy(renderString(filter, runContext))
-            .sortBy(renderString(sortBy, runContext));
+            .filterBy(runContext.render(filter).as(String.class).orElse(""))
+            .sortBy(runContext.render(sortBy).as(String.class).orElse(""));
     }
 
     protected static Output generateOutput(RunContext runContext, SearchResult searchResult)

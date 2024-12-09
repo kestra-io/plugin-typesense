@@ -5,7 +5,6 @@ import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.Task;
 import io.kestra.core.runners.RunContext;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.List;
@@ -24,41 +23,39 @@ import org.typesense.resources.Node;
 public class AbstractTypesenseTask extends Task {
 
     @Schema(
-        title = "The host of the typsense DB",
-        example = "localhost",
-        requiredMode = RequiredMode.REQUIRED
+        title = "The host of the typesense DB"
     )
     @NotNull
     protected Property<String> host;
 
     @Schema(
-        title = "The port of the typsense DB",
-        example = "8108",
-        requiredMode = RequiredMode.REQUIRED
+        title = "The port of the typesense DB"
     )
     @NotNull
     protected Property<String> port;
 
     @Schema(
-        title = "The api key to connect to the typsense DB",
-        example = "my_key",
-        requiredMode = RequiredMode.REQUIRED
+        title = "The API key to connect to the typesense DB"
     )
     @NotNull
     protected Property<String> apiKey;
 
     @Schema(
-        title = "The name of the typsense collection",
-        example = "my_collection",
-        requiredMode = RequiredMode.REQUIRED
+        title = "The name of the typesense collection"
     )
     @NotNull
     protected Property<String> collection;
 
+    @Schema(
+        title = "Is HTTPS used",
+        description = "By default, HTTP protocol will be use. Set this value to true tu use HTTPS"
+    )
+    protected Property<Boolean> https;
+
     protected Client getClient(RunContext context) throws IllegalVariableEvaluationException {
         Configuration configuration = new Configuration(
             List.of(new Node(
-                "http",
+                context.render(https).as(Boolean.class).orElse(false) ? "https": "http",
                 context.render(host).as(String.class).orElseThrow(),
                 context.render(port).as(String.class).orElseThrow())
             ),

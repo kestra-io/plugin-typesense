@@ -35,8 +35,10 @@ class DocumentIndexTest extends TypesenseContainer {
 
         task.run(runContext);
 
-        assertThat(runContext.metrics().size(), is(1));
-        assertThat(runContext.metrics().getFirst().getName(), is("documentAdded"));
-        assertThat(runContext.metrics().getFirst().getValue(), is(1D));
+        Map<String, Object> documents = client.collections(COLLECTION).documents("0").retrieve();
+
+        assertThat(documents.get("countryName"), is("France"));
+        assertThat(documents.get("capital"), is("Paris"));
+        assertThat(documents.get("gdp"), is(123456));
     }
 }

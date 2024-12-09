@@ -7,6 +7,7 @@ import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.models.tasks.VoidOutput;
 import io.kestra.core.runners.RunContext;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -51,19 +52,19 @@ public class DocumentIndex extends AbstractTypesenseTask implements RunnableTask
         title = "The document to index",
         description = "The document to index must be a Map<String, Object>"
     )
+    @NotNull
     private Property<Map<String, Object>> document;
 
     @Override
     public VoidOutput run(RunContext runContext) throws Exception {
-        Logger logger = runContext.logger();
         Client client = getClient(runContext);
         String renderedCollection = renderCollection(runContext);
         client.collections(renderedCollection)
             .documents()
             .upsert(runContext.render(document).asMap(String.class, Object.class));
 
-        runContext.metric(Counter.of("documentAdded", 1));
-        logger.info("Successfully added documents to collection {}", renderedCollection);
+        Logger logger = runContext.logger();
+        logger.debug("Successfully added documents to collection {}", renderedCollection);
         return null;
     }
 
