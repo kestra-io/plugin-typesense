@@ -20,7 +20,7 @@ import org.typesense.resources.Node;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class AbstractTypesenseTask extends Task {
+public abstract class AbstractTypesenseTask extends Task {
 
     @Schema(
         title = "The host of the typesense DB"
