@@ -29,20 +29,21 @@ import org.typesense.api.Client;
     examples = {
         @io.kestra.core.models.annotations.Example(
             title = "Index a document to a Typesense DB",
+            full = true,
             code = {
                 """
-                    id: typesense
-                    namespace: compnay.team
+                id: typesense_index_document
+                namespace: compnay.team
 
-                    tasks:
-                    - id: index_document
-                      type: io.kestra.plugin.typesense.DocumentIndex
-                      document: { "countryName":"France", "capital": "Paris", "gdp": 123456}
-                      apiKey: test-key
-                      port: 8108
-                      host: localhost
-                      collection: Countries
-                    """
+                tasks:
+                  - id: index_document
+                    type: io.kestra.plugin.typesense.DocumentIndex
+                    document: { "countryName":"France", "capital": "Paris", "gdp": 123456}
+                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                    port: 8108
+                    host: localhost
+                    collection: Countries
+                """
             }
         )
     }

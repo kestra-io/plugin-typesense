@@ -28,20 +28,21 @@ import org.typesense.api.Client;
     examples = {
         @io.kestra.core.models.annotations.Example(
             title = "Get a document from a Typesense DB",
+            full = true,
             code = {
                 """
-                    id: typesense
-                    namespace: compnay.team
+                id: typesense_get_document
+                namespace: compnay.team
 
-                    tasks:
-                    - id: get_document
-                      type: io.kestra.plugin.typesense.DocumentGet
-                      documentId: "0"
-                      apiKey: test-key
-                      port: 8108
-                      host: localhost
-                      collection: Countries
-                    """
+                tasks:
+                  - id: get_document
+                    type: io.kestra.plugin.typesense.DocumentGet
+                    documentId: "0"
+                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                    port: 8108
+                    host: localhost
+                    collection: Countries
+                """
             }
         )
     }

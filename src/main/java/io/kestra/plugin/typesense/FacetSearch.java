@@ -26,24 +26,25 @@ import org.typesense.model.SearchParameters;
     examples = {
         @io.kestra.core.models.annotations.Example(
             title = "Search documents with facet",
+            full = true,
             code = {
                 """
-                    id: typesense
-                    namespace: company.team
+                id: typesense_facet_search
+                namespace: company.team
 
-                    tasks:
-                    - id: search
-                      type: io.kestra.plugin.typesense.FacetSearch
-                      apiKey: test-key
-                      port: 8108
-                      host: localhost
-                      collection: Countries
-                      query: Paris
-                      queryBy: capital
-                      filter: countryName: [France, England]
-                      sortBy: gdp:desc
-                      facetBy: gdp
-                    """
+                tasks:
+                  - id: facet_search
+                    type: io.kestra.plugin.typesense.FacetSearch
+                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                    port: 8108
+                    host: localhost
+                    collection: Countries
+                    query: Paris
+                    queryBy: capital
+                    filter: "countryName: [France, England]"
+                    sortBy: "gdp:desc"
+                    facetBy: gdp
+                """
             }
         )
     }
