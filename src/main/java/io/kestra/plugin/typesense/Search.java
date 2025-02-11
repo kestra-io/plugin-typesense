@@ -38,23 +38,24 @@ import reactor.core.publisher.Flux;
     examples = {
         @io.kestra.core.models.annotations.Example(
             title = "Search documents",
+            full = true,
             code = {
                 """
-                    id: typesense
-                    namespace: company.team
+                id: typesense_search
+                namespace: company.team
 
-                    tasks:
-                    - id: search
-                      type: io.kestra.plugin.typesense.Search
-                      apiKey: test-key
-                      port: 8108
-                      host: localhost
-                      collection: Countries
-                      query: Paris
-                      queryBy: capital
-                      filter: countryName: [France, England]
-                      sortBy: gdp:desc
-                    """
+                tasks:
+                  - id: search
+                    type: io.kestra.plugin.typesense.Search
+                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                    port: 8108
+                    host: localhost
+                    collection: Countries
+                    query: Paris
+                    queryBy: capital
+                    filter: "countryName: [France, England]"
+                    sortBy: "gdp:desc"
+                """
             }
         )
     }

@@ -38,20 +38,21 @@ import reactor.core.publisher.Flux;
     examples = {
         @io.kestra.core.models.annotations.Example(
             title = "Index documents to a Typesense DB from an ION file",
+            full = true,
             code = {
                 """
-                    id: typesense
-                    namespace: company.team
+                id: typesense_bulk_index
+                namespace: company.team
 
-                    tasks:
-                    - id: bulk_index
-                      type: io.kestra.plugin.typesense.BulkIndex
-                      apiKey: test-key
-                      port: 8108
-                      host: localhost
-                      collection: Countries
-                      from: file_uri
-                    """
+                tasks:
+                  - id: bulk_index
+                    type: io.kestra.plugin.typesense.BulkIndex
+                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                    port: 8108
+                    host: localhost
+                    collection: Countries
+                    from: file_uri
+                """
             }
         )
     }
