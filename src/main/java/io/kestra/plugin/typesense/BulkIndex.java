@@ -31,7 +31,7 @@ import reactor.core.publisher.Flux;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Bulk insert documents",
+    title = "Bulk-insert documents into a Typesense DB.",
     description = "Index documents to a Typesense DB from an ION file"
 )
 @Plugin(
