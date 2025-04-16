@@ -31,8 +31,7 @@ import reactor.core.publisher.Flux;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Search documents",
-    description = "Search documents from a Typesense DB"
+    title = "Search documents in a Typesense DB."
 )
 @Plugin(
     examples = {

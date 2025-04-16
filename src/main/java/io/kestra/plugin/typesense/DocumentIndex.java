@@ -23,7 +23,7 @@ import org.typesense.api.Client;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Index a document to a Typesense DB"
+    title = "Index a document to a Typesense DB."
 )
 @Plugin(
     examples = {

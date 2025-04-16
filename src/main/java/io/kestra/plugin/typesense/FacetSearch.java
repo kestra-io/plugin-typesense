@@ -19,8 +19,7 @@ import org.typesense.model.SearchParameters;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Search documents with facet",
-    description = "Search documents from a Typesense DB with facet"
+    title = "Search documents in a Typesense DB with a facet search."
 )
 @Plugin(
     examples = {

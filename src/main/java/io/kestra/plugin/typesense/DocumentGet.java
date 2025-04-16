@@ -22,7 +22,7 @@ import org.typesense.api.Client;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Get a document from a Typesense DB"
+    title = "Get a document from a Typesense DB."
 )
 @Plugin(
     examples = {
