@@ -10,6 +10,7 @@ import io.kestra.core.models.property.Property;
 import io.kestra.core.runners.RunContext;
 import io.kestra.core.runners.RunContextFactory;
 import io.kestra.core.storages.StorageInterface;
+import io.kestra.core.tenant.TenantService;
 import io.kestra.plugin.typesense.BulkIndex.Output;
 import io.kestra.plugin.typesense.typesense.TypesenseContainer;
 import jakarta.inject.Inject;
@@ -36,7 +37,7 @@ class BulkIndexTest extends TypesenseContainer {
     void should_bulk_index_documents() throws Exception {
 
         URI source = storageInterface.put(
-            null,
+            TenantService.MAIN_TENANT,
             null,
             new URI("/" + FriendlyId.createFriendlyId() + ".ion"),
             new FileInputStream(new File(Objects.requireNonNull(BulkIndexTest.class.getClassLoader()

@@ -10,6 +10,7 @@ import io.kestra.core.queues.QueueException;
 import io.kestra.core.repositories.LocalFlowRepositoryLoader;
 import io.kestra.core.runners.RunnerUtils;
 import io.kestra.core.runners.StandAloneRunner;
+import io.kestra.core.tenant.TenantService;
 import io.kestra.plugin.typesense.typesense.TypesenseContainer;
 import jakarta.inject.Inject;
 import java.io.IOException;
@@ -46,7 +47,7 @@ class TypesenseRunnerTest extends TypesenseContainer {
     @SuppressWarnings("unchecked")
     @Test
     void flow() throws TimeoutException, QueueException {
-        Execution execution = runnerUtils.runOne(null, "io.kestra.plugin.typesense", "typesense");
+        Execution execution = runnerUtils.runOne(TenantService.MAIN_TENANT, "io.kestra.plugin.typesense", "typesense");
 
         assertThat(execution.getTaskRunList(), hasSize(2));
         assertThat(execution.getTaskRunList().get(0).getOutputs(), is(Map.of()));
