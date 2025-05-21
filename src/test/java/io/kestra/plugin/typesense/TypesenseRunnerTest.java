@@ -50,7 +50,7 @@ class TypesenseRunnerTest extends TypesenseContainer {
         Execution execution = runnerUtils.runOne(TenantService.MAIN_TENANT, "io.kestra.plugin.typesense", "typesense");
 
         assertThat(execution.getTaskRunList(), hasSize(2));
-        assertThat(execution.getTaskRunList().get(0).getOutputs(), is(Map.of()));
+        assertThat(execution.getTaskRunList().get(0).getOutputs().size(), is(0));
         assertThat(execution.getTaskRunList().get(1).getOutputs().get("document"),
             is(Map.of("countryName", "France", "capital", "Paris", "gdp", 123456, "id", "0")));
     }
