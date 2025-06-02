@@ -68,7 +68,7 @@ public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<Bul
     @Schema(
         title = "The chunk size for every bulk request"
     )
-    private Property<Integer> chunk = Property.of(1000);
+    private Property<Integer> chunk = Property.ofValue(1000);
 
     @Override
     public BulkIndex.Output run(RunContext runContext) throws Exception {

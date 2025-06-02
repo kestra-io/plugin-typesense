@@ -29,11 +29,11 @@ class DocumentGetTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         DocumentGet task = DocumentGet.builder()
-            .documentId(Property.of("0"))
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
+            .documentId(Property.ofValue("0"))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
             .build();
 
         DocumentGet.Output runOutput = task.run(runContext);
