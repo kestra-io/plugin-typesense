@@ -36,13 +36,13 @@ class FacetSearchTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         FacetSearch task = FacetSearch.builder()
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
-            .query(Property.of("CapitalCity"))
-            .queryBy(Property.of("capital"))
-            .facetBy(Property.of("gdp"))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
+            .query(Property.ofValue("CapitalCity"))
+            .queryBy(Property.ofValue("capital"))
+            .facetBy(Property.ofValue("gdp"))
             .build();
 
         Output runOutput = task.run(runContext);

@@ -26,11 +26,11 @@ class DocumentIndexTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         DocumentIndex task = DocumentIndex.builder()
-            .document(Property.of(Map.of("countryName", "France", "capital", "Paris", "gdp", 123456)))
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
+            .document(Property.ofValue(Map.of("countryName", "France", "capital", "Paris", "gdp", 123456)))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
             .build();
 
         task.run(runContext);

@@ -37,12 +37,12 @@ class SearchTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         Search task = Search.builder()
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
-            .query(Property.of("Paris"))
-            .queryBy(Property.of("capital"))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
+            .query(Property.ofValue("Paris"))
+            .queryBy(Property.ofValue("capital"))
             .build();
 
         Search.Output runOutput = task.run(runContext);
@@ -64,14 +64,14 @@ class SearchTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         Search task = Search.builder()
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
-            .query(Property.of("CapitalCity"))
-            .queryBy(Property.of("capital"))
-            .filter(Property.of("countryName: [country1, country2]"))
-            .sortBy(Property.of("gdp:desc"))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
+            .query(Property.ofValue("CapitalCity"))
+            .queryBy(Property.ofValue("capital"))
+            .filter(Property.ofValue("countryName: [country1, country2]"))
+            .sortBy(Property.ofValue("gdp:desc"))
             .build();
 
         Search.Output runOutput = task.run(runContext);
@@ -96,12 +96,12 @@ class SearchTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         Search task = Search.builder()
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
-            .query(Property.of("Tokyo"))
-            .queryBy(Property.of("capital"))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
+            .query(Property.ofValue("Tokyo"))
+            .queryBy(Property.ofValue("capital"))
             .build();
 
         Search.Output runOutput = task.run(runContext);
