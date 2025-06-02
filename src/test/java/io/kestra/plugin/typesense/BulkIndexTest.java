@@ -48,12 +48,12 @@ class BulkIndexTest extends TypesenseContainer {
         RunContext runContext = runContextFactory.of(Map.of());
 
         BulkIndex task = BulkIndex.builder()
-            .apiKey(Property.of(KEY))
-            .port(Property.of(PORT))
-            .host(Property.of(HOST))
-            .collection(Property.of(COLLECTION))
-            .from(Property.of(source.toString()))
-            .chunk(Property.of(2))
+            .apiKey(Property.ofValue(KEY))
+            .port(Property.ofValue(PORT))
+            .host(Property.ofValue(HOST))
+            .collection(Property.ofValue(COLLECTION))
+            .from(Property.ofValue(source.toString()))
+            .chunk(Property.ofValue(2))
             .build();
 
         Output output = task.run(runContext);
