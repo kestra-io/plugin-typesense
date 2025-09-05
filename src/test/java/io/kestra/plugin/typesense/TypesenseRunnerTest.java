@@ -9,7 +9,7 @@ import io.kestra.core.models.executions.Execution;
 import io.kestra.core.queues.QueueException;
 import io.kestra.core.repositories.LocalFlowRepositoryLoader;
 import io.kestra.core.runners.RunnerUtils;
-import io.kestra.core.runners.StandAloneRunner;
+import io.kestra.core.runners.TestRunner;
 import io.kestra.core.tenant.TenantService;
 import io.kestra.plugin.typesense.typesense.TypesenseContainer;
 import jakarta.inject.Inject;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 @KestraTest
 class TypesenseRunnerTest extends TypesenseContainer {
     @Inject
-    protected StandAloneRunner runner;
+    protected TestRunner runner;
 
     @Inject
     protected RunnerUtils runnerUtils;
@@ -44,7 +44,6 @@ class TypesenseRunnerTest extends TypesenseContainer {
         this.runner.run();
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void flow() throws TimeoutException, QueueException {
         Execution execution = runnerUtils.runOne(TenantService.MAIN_TENANT, "io.kestra.plugin.typesense", "typesense");
