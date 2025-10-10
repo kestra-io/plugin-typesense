@@ -1,5 +1,6 @@
 package io.kestra.plugin.typesense;
 
+import io.kestra.core.models.annotations.Metric;
 import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.executions.metrics.Counter;
 import io.kestra.core.models.property.Property;
@@ -55,6 +56,10 @@ import reactor.core.publisher.Flux;
                 """
             }
         )
+    },
+    metrics = {
+        @Metric(name = "requests.count", type = Counter.TYPE, description = "The total number of bulk index requests sent to Typesense"),
+        @Metric(name = "records", type = Counter.TYPE, description = "The total number of records indexed")
     }
 )
 public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<BulkIndex.Output> {
