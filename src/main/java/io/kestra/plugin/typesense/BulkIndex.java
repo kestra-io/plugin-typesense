@@ -58,8 +58,8 @@ import reactor.core.publisher.Flux;
         )
     },
     metrics = {
-        @Metric(name = "requests.count", type = Counter.TYPE, description = "The total number of bulk index requests sent to Typesense"),
-        @Metric(name = "records", type = Counter.TYPE, description = "The total number of records indexed")
+ @Metric(name = "requests.count", description = "Number of request", type = Counter.TYPE),
+        @Metric(name = "records", description = "Number of records", type = Counter.TYPE),
     }
 )
 public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<BulkIndex.Output> {
