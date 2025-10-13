@@ -58,7 +58,7 @@ import reactor.core.publisher.Flux;
         )
     },
     metrics = {
-        @Metric(name = "requests.count", description = "Number of request", type = Counter.TYPE),
+ @Metric(name = "requests.count", description = "Number of request", type = Counter.TYPE),
         @Metric(name = "records", description = "Number of records", type = Counter.TYPE),
     }
 )
