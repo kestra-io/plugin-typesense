@@ -101,7 +101,7 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-library"
 
     //test container
-    testImplementation 'org.testcontainers:testcontainers:1.21.3'
+    testImplementation 'org.testcontainers:testcontainers:2.0.1'
 
     testImplementation group: 'com.devskiller.friendly-id', name: 'friendly-id'
 }
