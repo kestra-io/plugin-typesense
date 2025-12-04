@@ -1,8 +1,8 @@
 group: io.kestra.plugin.typesense
 name: "typesense"
 title: "Typesense"
-description: "This sub-group of plugins contains tasks for using Typesense collection database. Typesense is a RESTful search API. It aims to be a ready-to-go solution for everyone who wants a fast and relevant search experience for their end-users"
-body: ""
+description: "Tasks that load data into and query Typesense collections."
+body: "Provide Typesense API host/key and collection schema to create/update collections, import documents, and run searches with filters and sorting, returning JSON results for downstream workflows."
 videos: []
 createdBy: "Kestra Core Team"
 managedBy: "Kestra Core Team"
