@@ -22,7 +22,8 @@ import org.typesense.api.Client;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Get a document from a Typesense DB."
+    title = "Fetch one document from Typesense",
+    description = "Retrieves a single document by id from the specified collection."
 )
 @Plugin(
     examples = {
@@ -32,7 +33,7 @@ import org.typesense.api.Client;
             code = {
                 """
                 id: typesense_get_document
-                namespace: compnay.team
+                namespace: company.team
 
                 tasks:
                   - id: get_document
@@ -50,7 +51,8 @@ import org.typesense.api.Client;
 public class DocumentGet extends AbstractTypesenseTask implements RunnableTask<DocumentGet.Output> {
 
     @Schema(
-        title = "The id of the document to get"
+        title = "Document id",
+        description = "Typesense document id to fetch; must exist in the collection."
     )
     @NotNull
     private Property<String> documentId;
@@ -76,7 +78,8 @@ public class DocumentGet extends AbstractTypesenseTask implements RunnableTask<D
     public static class Output implements io.kestra.core.models.tasks.Output {
 
         @Schema(
-            title = "The document fetched from the database"
+            title = "Fetched document",
+            description = "Document map returned by Typesense for the requested id."
         )
         private Map<String, Object> document;
     }

@@ -23,7 +23,8 @@ import org.typesense.api.Client;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Index a document to a Typesense DB."
+    title = "Upsert one document into Typesense",
+    description = "Writes a single JSON document to the target collection using Typesense upsert semantics (create or replace)."
 )
 @Plugin(
     examples = {
@@ -33,7 +34,7 @@ import org.typesense.api.Client;
             code = {
                 """
                 id: typesense_index_document
-                namespace: compnay.team
+                namespace: company.team
 
                 tasks:
                   - id: index_document
@@ -50,8 +51,8 @@ import org.typesense.api.Client;
 )
 public class DocumentIndex extends AbstractTypesenseTask implements RunnableTask<VoidOutput> {
     @Schema(
-        title = "The document to index",
-        description = "The document to index must be a Map<String, Object>"
+        title = "Document body",
+        description = "Map of fields to upsert. Keys must match the collection schema; nested objects are not flattened."
     )
     @NotNull
     private Property<Map<String, Object>> document;

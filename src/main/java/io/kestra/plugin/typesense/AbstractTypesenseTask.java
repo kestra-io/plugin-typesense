@@ -23,32 +23,36 @@ import org.typesense.resources.Node;
 public abstract class AbstractTypesenseTask extends Task {
 
     @Schema(
-        title = "The host of the typesense DB"
+        title = "Typesense host",
+        description = "Hostname or IP address of the Typesense cluster node or load balancer"
     )
     @NotNull
     protected Property<String> host;
 
     @Schema(
-        title = "The port of the typesense DB"
+        title = "Typesense port",
+        description = "TCP port for the Typesense HTTP API; 8108 is the Typesense default"
     )
     @NotNull
     protected Property<String> port;
 
     @Schema(
-        title = "The API key to connect to the typesense DB"
+        title = "Typesense API key",
+        description = "Admin or search key used for this request; must allow access to the target collection"
     )
     @NotNull
     protected Property<String> apiKey;
 
     @Schema(
-        title = "The name of the typesense collection"
+        title = "Collection name",
+        description = "Name of the Typesense collection; value is rendered before each call"
     )
     @NotNull
     protected Property<String> collection;
 
     @Schema(
-        title = "Is HTTPS used",
-        description = "By default, HTTP protocol will be use. Set this value to true tu use HTTPS"
+        title = "Use HTTPS",
+        description = "Default false (HTTP). Set to true to call Typesense over HTTPS/TLS"
     )
     protected Property<Boolean> https;
 
