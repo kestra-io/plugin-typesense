@@ -31,7 +31,8 @@ import reactor.core.publisher.Flux;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Search documents in a Typesense DB."
+    title = "Search documents in Typesense",
+    description = "Runs a full-text/queryBy search on a collection and stores the results as an Amazon ION file in internal storage."
 )
 @Plugin(
     examples = {
@@ -62,25 +63,29 @@ import reactor.core.publisher.Flux;
 public class Search extends AbstractTypesenseTask implements RunnableTask<Search.Output> {
 
     @Schema(
-        title = "The query"
+        title = "Search query",
+        description = "Free-text query string sent as `q` to Typesense. Required."
     )
     @NotNull
     protected Property<String> query;
 
     @Schema(
-        title = "The fields to query",
+        title = "Query fields",
+        description = "Comma-separated collection fields used for `query_by`. Order matters for tie-breaking.",
         example= "country, capital"
     )
     @NotNull
     protected Property<String> queryBy;
 
     @Schema(
-        title = "The filters to apply to the query"
+        title = "Filter expression",
+        description = "Optional `filter_by` clause to pre-filter results."
     )
     protected Property<String> filter;
 
     @Schema(
-        title = "The sorts to apply to the query"
+        title = "Sort expression",
+        description = "Optional `sort_by` clause. Example: `gdp:desc`."
     )
     protected Property<String> sortBy;
 
@@ -122,9 +127,9 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
     @Getter
     public static class Output implements io.kestra.core.models.tasks.Output {
 
-        @Schema(title = "URI to output", description = "Results URI to an Amazon .ion file")
+        @Schema(title = "Results URI", description = "Storage URI of the Amazon ION results file.")
         private final URI uri;
-        @Schema(title = "Hits number", description = "Number of items hit by the search request")
+        @Schema(title = "Hit count", description = "Number of documents returned by Typesense for this search.")
         private final Integer totalHits;
     }
 

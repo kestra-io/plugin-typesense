@@ -19,7 +19,8 @@ import org.typesense.model.SearchParameters;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Search documents in a Typesense DB with a facet search."
+    title = "Search with facets in Typesense",
+    description = "Performs a search and computes facet counts on the specified fields."
 )
 @Plugin(
     examples = {
@@ -51,7 +52,8 @@ import org.typesense.model.SearchParameters;
 public class FacetSearch extends Search {
 
     @Schema(
-        title = "The query"
+        title = "Facet fields",
+        description = "Comma-separated list passed to `facet_by` to compute facet counts."
     )
     @NotNull
     protected Property<String> facetBy;

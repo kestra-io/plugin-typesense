@@ -32,8 +32,8 @@ import reactor.core.publisher.Flux;
 @Getter
 @NoArgsConstructor
 @Schema(
-    title = "Bulk-insert documents into a Typesense DB.",
-    description = "Index documents to a Typesense DB from an ION file"
+    title = "Bulk upsert documents into Typesense",
+    description = "Streams records from an Amazon ION file in internal storage and upserts them into the target collection."
 )
 @Plugin(
     examples = {
@@ -52,7 +52,7 @@ import reactor.core.publisher.Flux;
                     port: 8108
                     host: localhost
                     collection: Countries
-                    from: file_uri
+                    from: kestra://data/countries.ion
                 """
             }
         )
@@ -65,13 +65,15 @@ import reactor.core.publisher.Flux;
 public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<BulkIndex.Output> {
 
     @Schema(
-        title = "The file URI containing the documents to index"
+        title = "Input ION file URI",
+        description = "kestra:// or other storage URI pointing to an Amazon ION file with one JSON document per line."
     )
     @NotNull
     private Property<String> from;
 
     @Schema(
-        title = "The chunk size for every bulk request"
+        title = "Bulk chunk size",
+        description = "Number of documents per Typesense bulk call. Default 1000; lower to reduce memory, raise to improve throughput."
     )
     @Builder.Default
     private Property<Integer> chunk = Property.ofValue(1000);
@@ -129,7 +131,8 @@ public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<Bul
     @Getter
     public static class Output implements io.kestra.core.models.tasks.Output {
         @Schema(
-            title = "The size of the rows fetched."
+            title = "Indexed document count",
+            description = "Total number of documents read from the input and sent to Typesense."
         )
         private Long size;
     }
