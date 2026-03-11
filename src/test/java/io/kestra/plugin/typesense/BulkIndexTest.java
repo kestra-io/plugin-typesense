@@ -1,10 +1,15 @@
 package io.kestra.plugin.typesense;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URI;
+import java.util.Map;
+import java.util.Objects;
+
+import org.junit.jupiter.api.Test;
 
 import com.devskiller.friendly_id.FriendlyId;
+
 import io.kestra.core.junit.annotations.KestraTest;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.runners.RunContext;
@@ -13,13 +18,12 @@ import io.kestra.core.storages.StorageInterface;
 import io.kestra.core.tenant.TenantService;
 import io.kestra.plugin.typesense.BulkIndex.Output;
 import io.kestra.plugin.typesense.typesense.TypesenseContainer;
+
 import jakarta.inject.Inject;
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URI;
-import java.util.Map;
-import java.util.Objects;
-import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 
 /**
  * This test will only test the main task, this allows you to send any input parameters to your task
@@ -40,9 +44,15 @@ class BulkIndexTest extends TypesenseContainer {
             TenantService.MAIN_TENANT,
             null,
             new URI("/" + FriendlyId.createFriendlyId() + ".ion"),
-            new FileInputStream(new File(Objects.requireNonNull(BulkIndexTest.class.getClassLoader()
-                    .getResource("files/bulk_import.ion"))
-                .toURI()))
+            new FileInputStream(
+                new File(
+                    Objects.requireNonNull(
+                        BulkIndexTest.class.getClassLoader()
+                            .getResource("files/bulk_import.ion")
+                    )
+                        .toURI()
+                )
+            )
         );
 
         RunContext runContext = runContextFactory.of(Map.of());
@@ -72,6 +82,5 @@ class BulkIndexTest extends TypesenseContainer {
         assertThat(runContext.metrics().get(1).getName(), is("records"));
         assertThat(runContext.metrics().get(1).getValue(), is(3D));
     }
-
 
 }

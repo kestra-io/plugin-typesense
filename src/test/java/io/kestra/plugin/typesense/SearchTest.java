@@ -1,8 +1,10 @@
 package io.kestra.plugin.typesense;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+import java.util.Map;
+
+import org.hamcrest.core.Is;
+import org.junit.jupiter.api.Test;
 
 import io.kestra.core.junit.annotations.KestraTest;
 import io.kestra.core.models.property.Property;
@@ -10,11 +12,12 @@ import io.kestra.core.runners.RunContext;
 import io.kestra.core.runners.RunContextFactory;
 import io.kestra.core.storages.StorageInterface;
 import io.kestra.plugin.typesense.typesense.TypesenseContainer;
+
 import jakarta.inject.Inject;
-import java.util.List;
-import java.util.Map;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * This test will only test the main task, this allows you to send any input parameters to your task

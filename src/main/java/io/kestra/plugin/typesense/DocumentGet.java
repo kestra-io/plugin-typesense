@@ -1,20 +1,23 @@
 package io.kestra.plugin.typesense;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.typesense.api.Client;
+
 import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.runners.RunContext;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.util.Map;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.slf4j.Logger;
-import org.typesense.api.Client;
 
 @SuperBuilder
 @ToString
@@ -32,18 +35,18 @@ import org.typesense.api.Client;
             full = true,
             code = {
                 """
-                id: typesense_get_document
-                namespace: company.team
+                    id: typesense_get_document
+                    namespace: company.team
 
-                tasks:
-                  - id: get_document
-                    type: io.kestra.plugin.typesense.DocumentGet
-                    documentId: "0"
-                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
-                    port: 8108
-                    host: localhost
-                    collection: Countries
-                """
+                    tasks:
+                      - id: get_document
+                        type: io.kestra.plugin.typesense.DocumentGet
+                        documentId: "0"
+                        apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                        port: 8108
+                        host: localhost
+                        collection: Countries
+                    """
             }
         )
     }

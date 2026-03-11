@@ -1,9 +1,5 @@
 package io.kestra.plugin.typesense.typesense;
 
-import io.kestra.core.serializers.FileSerde;
-import io.kestra.core.storages.StorageInterface;
-import io.kestra.core.tenant.TenantService;
-import io.kestra.plugin.typesense.Search.Output;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +7,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +20,11 @@ import org.typesense.model.CollectionSchema;
 import org.typesense.model.DeleteDocumentsParameters;
 import org.typesense.model.Field;
 import org.typesense.resources.Node;
+
+import io.kestra.core.serializers.FileSerde;
+import io.kestra.core.storages.StorageInterface;
+import io.kestra.core.tenant.TenantService;
+import io.kestra.plugin.typesense.Search.Output;
 
 public class TypesenseContainer {
 
@@ -45,7 +47,8 @@ public class TypesenseContainer {
 
         Configuration configuration = new Configuration(
             List.of(new Node("http", HOST, PORT)),
-            Duration.ofSeconds(2), KEY);
+            Duration.ofSeconds(2), KEY
+        );
 
         client = new Client(configuration);
 
@@ -84,7 +87,8 @@ public class TypesenseContainer {
     protected Map<String, Object> getResults(Output runOutput, StorageInterface storageInterface)
         throws IOException {
         BufferedReader searchInputStream = new BufferedReader(
-            new InputStreamReader(storageInterface.get(TenantService.MAIN_TENANT, null, runOutput.getUri())));
+            new InputStreamReader(storageInterface.get(TenantService.MAIN_TENANT, null, runOutput.getUri()))
+        );
         List<Map<String, Object>> resultWrapper = new ArrayList<>();
         FileSerde.reader(searchInputStream, r -> resultWrapper.add((Map<String, Object>) r));
         return resultWrapper.getFirst();

@@ -1,28 +1,31 @@
 package io.kestra.plugin.typesense;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+
+import org.slf4j.Logger;
+import org.typesense.api.Client;
+import org.typesense.model.SearchParameters;
+import org.typesense.model.SearchResult;
+
 import io.kestra.core.exceptions.IllegalVariableEvaluationException;
 import io.kestra.core.models.annotations.Plugin;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.runners.RunContext;
 import io.kestra.core.serializers.FileSerde;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URI;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.slf4j.Logger;
-import org.typesense.api.Client;
-import org.typesense.model.SearchParameters;
-import org.typesense.model.SearchResult;
 import reactor.core.publisher.Flux;
 
 @SuperBuilder
@@ -41,21 +44,21 @@ import reactor.core.publisher.Flux;
             full = true,
             code = {
                 """
-                id: typesense_search
-                namespace: company.team
+                    id: typesense_search
+                    namespace: company.team
 
-                tasks:
-                  - id: search
-                    type: io.kestra.plugin.typesense.Search
-                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
-                    port: 8108
-                    host: localhost
-                    collection: Countries
-                    query: Paris
-                    queryBy: capital
-                    filter: "countryName: [France, England]"
-                    sortBy: "gdp:desc"
-                """
+                    tasks:
+                      - id: search
+                        type: io.kestra.plugin.typesense.Search
+                        apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                        port: 8108
+                        host: localhost
+                        collection: Countries
+                        query: Paris
+                        queryBy: capital
+                        filter: "countryName: [France, England]"
+                        sortBy: "gdp:desc"
+                    """
             }
         )
     }
@@ -72,7 +75,7 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
     @Schema(
         title = "Query fields",
         description = "Comma-separated collection fields used for `query_by`. Order matters for tie-breaking.",
-        example= "country, capital"
+        example = "country, capital"
     )
     @NotNull
     protected Property<String> queryBy;
@@ -88,7 +91,6 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
         description = "Optional `sort_by` clause. Example: `gdp:desc`."
     )
     protected Property<String> sortBy;
-
 
     @Override
     public Output run(RunContext runContext) throws Exception {

@@ -1,21 +1,23 @@
 package io.kestra.plugin.typesense;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.typesense.api.Client;
+
 import io.kestra.core.models.annotations.Plugin;
-import io.kestra.core.models.executions.metrics.Counter;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.models.tasks.VoidOutput;
 import io.kestra.core.runners.RunContext;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.slf4j.Logger;
-import org.typesense.api.Client;
 
 @SuperBuilder
 @ToString
@@ -33,18 +35,18 @@ import org.typesense.api.Client;
             full = true,
             code = {
                 """
-                id: typesense_index_document
-                namespace: company.team
+                    id: typesense_index_document
+                    namespace: company.team
 
-                tasks:
-                  - id: index_document
-                    type: io.kestra.plugin.typesense.DocumentIndex
-                    document: { "countryName":"France", "capital": "Paris", "gdp": 123456}
-                    apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
-                    port: 8108
-                    host: localhost
-                    collection: Countries
-                """
+                    tasks:
+                      - id: index_document
+                        type: io.kestra.plugin.typesense.DocumentIndex
+                        document: { "countryName":"France", "capital": "Paris", "gdp": 123456}
+                        apiKey: "{{ secret('TYPESENSE_API_KEY') }}"
+                        port: 8108
+                        host: localhost
+                        collection: Countries
+                    """
             }
         )
     }

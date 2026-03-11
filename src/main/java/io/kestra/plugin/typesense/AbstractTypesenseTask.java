@@ -1,20 +1,23 @@
 package io.kestra.plugin.typesense;
 
+import java.time.Duration;
+import java.util.List;
+
+import org.typesense.api.Client;
+import org.typesense.api.Configuration;
+import org.typesense.resources.Node;
+
 import io.kestra.core.exceptions.IllegalVariableEvaluationException;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.Task;
 import io.kestra.core.runners.RunContext;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.time.Duration;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.typesense.api.Client;
-import org.typesense.api.Configuration;
-import org.typesense.resources.Node;
 
 @SuperBuilder
 @AllArgsConstructor
@@ -58,12 +61,15 @@ public abstract class AbstractTypesenseTask extends Task {
 
     protected Client getClient(RunContext context) throws IllegalVariableEvaluationException {
         Configuration configuration = new Configuration(
-            List.of(new Node(
-                context.render(https).as(Boolean.class).orElse(false) ? "https": "http",
-                context.render(host).as(String.class).orElseThrow(),
-                context.render(port).as(String.class).orElseThrow())
+            List.of(
+                new Node(
+                    context.render(https).as(Boolean.class).orElse(false) ? "https" : "http",
+                    context.render(host).as(String.class).orElseThrow(),
+                    context.render(port).as(String.class).orElseThrow()
+                )
             ),
-            Duration.ofSeconds(2),context.render(apiKey).as(String.class).orElseThrow());
+            Duration.ofSeconds(2), context.render(apiKey).as(String.class).orElseThrow()
+        );
         return new Client(configuration);
     }
 
