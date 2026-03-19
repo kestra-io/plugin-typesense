@@ -1,0 +1,139 @@
+id: all_typesense
+namespace: sanitychecks.plugin-typesense
+
+variables:
+  api_key: test-key
+  collection: "countries_{{ execution.id }}"
+
+tasks:
+  - id: init
+    type: io.kestra.plugin.core.output.OutputValues
+    values:
+      port: "{{ randomPort() }}"
+
+  - id: docker_start
+    type: io.kestra.plugin.docker.Run
+    containerImage: typesense/typesense:0.24.0
+    portBindings:
+      - "{{ outputs.init.values.port }}:8108"
+    env:
+      TYPESENSE_API_KEY: "{{ vars.api_key }}"
+      TYPESENSE_DATA_DIR: /tmp
+    wait: false
+
+  - id: wait_typesense
+    type: io.kestra.plugin.core.flow.Sleep
+    duration: PT20S
+
+  - id: healthcheck
+    type: io.kestra.plugin.core.http.Request
+    uri: "http://localhost:{{ outputs.init.values.port }}/health"
+    method: GET
+    retry:
+      type: constant
+      interval: PT3S
+      maxAttempt: 20
+
+  - id: create_collection
+    type: io.kestra.plugin.core.http.Request
+    uri: "http://localhost:{{ outputs.init.values.port }}/collections"
+    method: POST
+    headers:
+      X-TYPESENSE-API-KEY: "{{ vars.api_key }}"
+    contentType: application/json
+    body: |
+      {
+        "name": "{{ vars.collection }}",
+        "fields": [
+          {"name": "countryName", "type": "string"},
+          {"name": "capital", "type": "string"},
+          {"name": "region", "type": "string", "facet": true},
+          {"name": "gdp", "type": "int32", "facet": true, "sort": true}
+        ],
+        "default_sorting_field": "gdp"
+      }
+    retry:
+      type: constant
+      interval: PT3S
+      maxAttempt: 10
+
+  - id: write_documents
+    type: io.kestra.plugin.core.storage.Write
+    content: |
+      {"id":"germany","countryName":"Germany","capital":"Berlin","region":"Europe","gdp":4000}
+      {"id":"japan","countryName":"Japan","capital":"Tokyo","region":"Asia","gdp":5000}
+    extension: .ion
+
+  - id: document_index
+    type: io.kestra.plugin.typesense.DocumentIndex
+    host: localhost
+    port: "{{ outputs.init.values.port }}"
+    apiKey: "{{ vars.api_key }}"
+    collection: "{{ vars.collection }}"
+    document:
+      id: france
+      countryName: France
+      capital: Paris
+      region: Europe
+      gdp: 3000
+
+  - id: bulk_index
+    type: io.kestra.plugin.typesense.BulkIndex
+    host: localhost
+    port: "{{ outputs.init.values.port }}"
+    apiKey: "{{ vars.api_key }}"
+    collection: "{{ vars.collection }}"
+    from: "{{ outputs.write_documents.uri }}"
+    chunk: 1
+
+  - id: document_get
+    type: io.kestra.plugin.typesense.DocumentGet
+    host: localhost
+    port: "{{ outputs.init.values.port }}"
+    apiKey: "{{ vars.api_key }}"
+    collection: "{{ vars.collection }}"
+    documentId: france
+
+  - id: search
+    type: io.kestra.plugin.typesense.Search
+    host: localhost
+    port: "{{ outputs.init.values.port }}"
+    apiKey: "{{ vars.api_key }}"
+    collection: "{{ vars.collection }}"
+    query: Europe
+    queryBy: region
+    sortBy: gdp:desc
+
+  - id: facet_search
+    type: io.kestra.plugin.typesense.FacetSearch
+    host: localhost
+    port: "{{ outputs.init.values.port }}"
+    apiKey: "{{ vars.api_key }}"
+    collection: "{{ vars.collection }}"
+    query: Europe
+    queryBy: region
+    facetBy: region
+
+  - id: assert
+    type: io.kestra.plugin.core.execution.Assert
+    conditions:
+      - "{{ outputs.healthcheck.code == 200 }}"
+      - "{{ outputs.create_collection.code == 201 }}"
+      - "{{ outputs.bulk_index.size == 2 }}"
+      - "{{ outputs.document_get.document.id == 'france' }}"
+      - "{{ outputs.document_get.document.capital == 'Paris' }}"
+      - "{{ outputs.search.totalHits == 2 }}"
+      - "{{ fromIon(read(outputs.search.uri), allRows=true)[0].hits | length == 2 }}"
+      - "{{ fromIon(read(outputs.search.uri), allRows=true)[0].hits[0].document.countryName == 'Germany' }}"
+      - "{{ outputs.facet_search.totalHits == 2 }}"
+      - "{{ fromIon(read(outputs.facet_search.uri), allRows=true)[0].facet_counts[0].field_name == 'region' }}"
+      - "{{ fromIon(read(outputs.facet_search.uri), allRows=true)[0].facet_counts[0].counts[0].value == 'Europe' }}"
+
+finally:
+  - id: purge
+    type: io.kestra.plugin.core.storage.PurgeCurrentExecutionFiles
+
+  - id: docker_stop
+    type: io.kestra.plugin.docker.Stop
+    containerId: "{{ outputs.docker_start.taskRunner.containerId }}"
+    kill: true
