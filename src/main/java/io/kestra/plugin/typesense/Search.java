@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import reactor.core.publisher.Flux;
+import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -70,6 +71,7 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
         description = "Free-text query string sent as `q` to Typesense. Required."
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> query;
 
     @Schema(
@@ -78,18 +80,21 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
         example = "country, capital"
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> queryBy;
 
     @Schema(
         title = "Filter expression",
         description = "Optional `filter_by` clause to pre-filter results."
     )
+    @PluginProperty(group = "processing")
     protected Property<String> filter;
 
     @Schema(
         title = "Sort expression",
         description = "Optional `sort_by` clause. Example: `gdp:desc`."
     )
+    @PluginProperty(group = "processing")
     protected Property<String> sortBy;
 
     @Override

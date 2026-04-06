@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -58,6 +59,7 @@ public class FacetSearch extends Search {
         description = "Comma-separated list passed to `facet_by` to compute facet counts."
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> facetBy;
 
     @Override

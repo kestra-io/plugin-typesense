@@ -28,6 +28,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import reactor.core.publisher.Flux;
+import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -72,6 +73,7 @@ public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<Bul
         description = "kestra:// or other storage URI pointing to an Amazon ION file with one JSON document per line."
     )
     @NotNull
+    @PluginProperty(group = "main")
     private Property<String> from;
 
     @Schema(
@@ -79,6 +81,7 @@ public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<Bul
         description = "Number of documents per Typesense bulk call. Default 1000; lower to reduce memory, raise to improve throughput."
     )
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<Integer> chunk = Property.ofValue(1000);
 
     @Override
