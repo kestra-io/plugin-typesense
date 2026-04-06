@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @AllArgsConstructor
@@ -30,6 +31,7 @@ public abstract class AbstractTypesenseTask extends Task {
         description = "Hostname or IP address of the Typesense cluster node or load balancer"
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> host;
 
     @Schema(
@@ -37,6 +39,7 @@ public abstract class AbstractTypesenseTask extends Task {
         description = "TCP port for the Typesense HTTP API; 8108 is the Typesense default"
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> port;
 
     @Schema(
@@ -44,6 +47,7 @@ public abstract class AbstractTypesenseTask extends Task {
         description = "Admin or search key used for this request; must allow access to the target collection"
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> apiKey;
 
     @Schema(
@@ -51,12 +55,14 @@ public abstract class AbstractTypesenseTask extends Task {
         description = "Name of the Typesense collection; value is rendered before each call"
     )
     @NotNull
+    @PluginProperty(group = "main")
     protected Property<String> collection;
 
     @Schema(
         title = "Use HTTPS",
         description = "Default false (HTTP). Set to true to call Typesense over HTTPS/TLS"
     )
+    @PluginProperty(group = "advanced")
     protected Property<Boolean> https;
 
     protected Client getClient(RunContext context) throws IllegalVariableEvaluationException {

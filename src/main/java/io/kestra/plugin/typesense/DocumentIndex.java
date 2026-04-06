@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -57,6 +58,7 @@ public class DocumentIndex extends AbstractTypesenseTask implements RunnableTask
         description = "Map of fields to upsert. Keys must match the collection schema; nested objects are not flattened."
     )
     @NotNull
+    @PluginProperty(group = "main")
     private Property<Map<String, Object>> document;
 
     @Override
