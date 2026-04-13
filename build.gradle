@@ -107,7 +107,7 @@ dependencies {
     testImplementation group: 'com.devskiller.friendly-id', name: 'friendly-id'
 
     // sanity checks
-    testImplementation "io.kestra.plugin:plugin-docker:1.2.3"
+    testImplementation "io.kestra.plugin:plugin-docker:1.3.0"
 }
 
 /**********************************************************************************************************************\
