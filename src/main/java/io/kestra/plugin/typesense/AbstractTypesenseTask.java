@@ -47,7 +47,7 @@ public abstract class AbstractTypesenseTask extends Task {
         description = "Admin or search key used for this request; must allow access to the target collection"
     )
     @NotNull
-    @PluginProperty(group = "main")
+    @PluginProperty(group = "main", secret = true)
     protected Property<String> apiKey;
 
     @Schema(
