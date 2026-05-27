@@ -1,8 +1,8 @@
 package io.kestra.plugin.typesense;
 
-import java.io.BufferedWriter;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 
@@ -13,6 +13,7 @@ import org.typesense.model.SearchResult;
 
 import io.kestra.core.exceptions.IllegalVariableEvaluationException;
 import io.kestra.core.models.annotations.Plugin;
+import io.kestra.core.models.annotations.PluginProperty;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.RunnableTask;
 import io.kestra.core.runners.RunContext;
@@ -27,7 +28,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import reactor.core.publisher.Flux;
-import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -120,7 +120,7 @@ public class Search extends AbstractTypesenseTask implements RunnableTask<Search
     protected static Output generateOutput(RunContext runContext, SearchResult searchResult)
         throws IOException {
         File tempFile = runContext.workingDir().createTempFile(".ion").toFile();
-        try (var output = new BufferedWriter(new FileWriter(tempFile), FileSerde.BUFFER_SIZE)) {
+        try (var output = new BufferedOutputStream(new FileOutputStream(tempFile), FileSerde.BUFFER_SIZE)) {
             FileSerde.writeAll(output, Flux.just(searchResult)).blockOptional();
 
             return Output.builder()
