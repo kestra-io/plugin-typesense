@@ -1,7 +1,6 @@
 package io.kestra.plugin.typesense;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.BufferedInputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,6 +12,7 @@ import org.typesense.model.IndexAction;
 
 import io.kestra.core.models.annotations.Metric;
 import io.kestra.core.models.annotations.Plugin;
+import io.kestra.core.models.annotations.PluginProperty;
 import io.kestra.core.models.executions.metrics.Counter;
 import io.kestra.core.models.property.Property;
 import io.kestra.core.models.tasks.RunnableTask;
@@ -28,7 +28,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import reactor.core.publisher.Flux;
-import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -93,8 +92,8 @@ public class BulkIndex extends AbstractTypesenseTask implements RunnableTask<Bul
         URI uri = new URI(renderString(from, runContext));
 
         try (
-            BufferedReader inputStream = new BufferedReader(
-                new InputStreamReader(runContext.storage().getFile(uri)), FileSerde.BUFFER_SIZE
+            BufferedInputStream inputStream = new BufferedInputStream(
+                runContext.storage().getFile(uri), FileSerde.BUFFER_SIZE
             );
         ) {
             AtomicLong count = new AtomicLong();

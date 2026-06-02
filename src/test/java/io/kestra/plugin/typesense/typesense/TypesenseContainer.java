@@ -1,8 +1,8 @@
 package io.kestra.plugin.typesense.typesense;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +86,11 @@ public class TypesenseContainer {
 
     protected Map<String, Object> getResults(Output runOutput, StorageInterface storageInterface)
         throws IOException {
-        BufferedReader searchInputStream = new BufferedReader(
-            new InputStreamReader(storageInterface.get(TenantService.MAIN_TENANT, null, runOutput.getUri()))
+        InputStream searchInputStream = new BufferedInputStream(
+            storageInterface.get(TenantService.MAIN_TENANT, null, runOutput.getUri())
         );
         List<Map<String, Object>> resultWrapper = new ArrayList<>();
-        FileSerde.reader(searchInputStream, r -> resultWrapper.add((Map<String, Object>) r));
+        FileSerde.read(searchInputStream, r -> resultWrapper.add((Map<String, Object>) r));
         return resultWrapper.getFirst();
     }
 }
