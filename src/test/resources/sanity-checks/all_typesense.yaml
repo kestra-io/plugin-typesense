@@ -32,7 +32,7 @@ tasks:
     retry:
       type: constant
       interval: PT3S
-      maxAttempt: 20
+      maxAttempts: 20
 
   - id: create_collection
     type: io.kestra.plugin.core.http.Request
@@ -55,7 +55,7 @@ tasks:
     retry:
       type: constant
       interval: PT3S
-      maxAttempt: 10
+      maxAttempts: 10
 
   - id: write_documents
     type: io.kestra.plugin.core.storage.Write
