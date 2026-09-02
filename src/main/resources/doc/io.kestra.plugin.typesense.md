@@ -4,7 +4,7 @@ Index, search, and manage documents in Typesense from Kestra flows.
 
 ## Authentication
 
-Set `host`, `port`, `apiKey`, and `collection` (all required). Set `https: true` for TLS connections. Store secrets in [secrets](https://kestra.io/docs/concepts/secret) and apply connection properties globally with [plugin defaults](https://kestra.io/docs/workflow-components/plugin-defaults).
+Set `host`, `port`, `apiKey`, and `collection` (all required). Set `https: true` for TLS connections. Store secrets in [secrets](https://kestra.io/docs/concepts/secret) and set connection properties on each task.
 
 ## Tasks
 
